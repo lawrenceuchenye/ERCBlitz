@@ -2,7 +2,7 @@
 pragma solidity ^0.8.29;
 
 import "forge-std/Test.sol";
-import "../contracts/ERC165.sol";
+import "../src/ERC165.sol";
 
 contract MyContractTest is Test {
     MyContract myContract;
@@ -11,14 +11,14 @@ contract MyContractTest is Test {
         myContract = new MyContract();
     }
 
-    function testSupportsERC165() public {
+    function test_SupportsERC165() public {
         // ERC165 interface ID is always 0x01ffc9a7
         bytes4 ERC165_ID = 0x01ffc9a7;
         bool result = myContract.supportsInterface(ERC165_ID);
         assertTrue(result, "Contract should support ERC165");
     }
 
-    function testSupportsIMyInterface() public {
+    function test_SupportsIMyInterface() public {
         // Compute interface ID same way Solidity does
         bytes4 fooSelector = bytes4(keccak256("foo()"));
         bytes4 barSelector = bytes4(keccak256("bar(uint256)"));
@@ -28,7 +28,7 @@ contract MyContractTest is Test {
         assertTrue(result, "Contract should support IMyInterface");
     }
 
-    function testDoesNotSupportRandomId() public {
+    function test_DoesNotSupportRandomId() public {
         bytes4 randomId = 0x12345678;
         bool result = myContract.supportsInterface(randomId);
         assertFalse(result, "Contract should not support random interface");
