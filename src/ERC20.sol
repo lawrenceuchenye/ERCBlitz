@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.29;
 
-contract ECR20{
-    string public totalSupply;
+contract ERC20{
+    uint256 public totalSupply;
     string public name;
     string public symbol;
     uint8 public decimals;
     
     mapping(address=>uint256) public _balanceOf;
-    mapping(address => (address=>uint256)) _allowance;
+    mapping(address => mapping(address=>uint256)) private _allowances;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
 
-    constructor(uint256 _totalSupply,uint8 _decimals,string _tokenName,string _tokenSymbol,string _tokenName){
-      totalSupply=_totalSuppy * (10 ** uint256(_decimals)) ;
+    constructor(uint256 _totalSupply,uint8 _decimals,string memory _tokenName,string memory _tokenSymbol){
+      totalSupply=_totalSupply * (10 ** uint256(_decimals)) ;
       decimals=_decimals;
       name=_tokenName;
       symbol=_tokenSymbol;
@@ -63,11 +63,11 @@ contract ECR20{
     function _transfer(address from, address to, uint256 amount) internal {
         require(from != address(0), "ERC20: transfer from zero");
         require(to != address(0), "ERC20: transfer to zero");
-        uint256 fromBalance = _balances[from];
+        uint256 fromBalance = _balanceOf[from];
         require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
 
-        _balances[from] = fromBalance - amount;
-        _balances[to] += amount;
+        _balanceOf[from] = fromBalance - amount;
+        _balanceOf[to] += amount;
 
         emit Transfer(from, to, amount);
     }
@@ -83,15 +83,15 @@ contract ECR20{
     function _mint(address to, uint256 amount) internal {
         require(to != address(0), "ERC20: mint to zero");
         totalSupply += amount;
-        _balances[to] += amount;
+        _balanceOf[to] += amount;
         emit Transfer(address(0), to, amount);
     }
 
     function _burn(address from, uint256 amount) internal {
         require(from != address(0), "ERC20: burn from zero");
-        uint256 bal = _balances[from];
+        uint256 bal = _balanceOf[from];
         require(bal >= amount, "ERC20: burn amount exceeds balance");
-        _balances[from] = bal - amount;
+        _balanceOf[from] = bal - amount;
         totalSupply -= amount;
         emit Transfer(from, address(0), amount);
     }
