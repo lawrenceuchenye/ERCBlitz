@@ -1,10 +1,10 @@
-// SPDX-License-Identifier: 
+// SPDX-License-Identifier:MIT
 pragma solidity ^0.8.29;
 
 import {Script} from "forge-std/Script.sol";
 import {ERC20} from "../src/ERC20.sol";
 
-contract ERC20Deploment is Script {
+contract ERC20Script is Script {
     ERC20 public stablecoin;
 
     function setUp() public {
